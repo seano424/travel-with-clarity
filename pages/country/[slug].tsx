@@ -184,8 +184,6 @@ export default function Country(props: Props) {
 
 // This also gets called at build time
 export async function getServerSideProps({ params }: any) {
-  console.log(params.slug)
-
   const res = await fetch(
     `https://travelbriefing.org/${params.slug}?format=json`
   )

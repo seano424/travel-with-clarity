@@ -1,10 +1,21 @@
-import type { NextPage } from 'next'
+import { useContext, useEffect } from 'react'
+import { CountriesContext } from 'contexts/CountriesContext'
 import Hero from '@/components/Hero'
 import Region from '@/components/Region'
 import groupBy from 'lodash/groupBy'
 
-const Home: NextPage = ({ regions }: any) => {
-  console.log(regions);
+interface Props {
+  regions: []
+  countries: string[]
+}
+
+export default function Home(props: Props) {
+  const { regions, countries } = props
+  const context = useContext(CountriesContext)
+  
+  useEffect(() => {
+    countries && context?.setCountriesList(countries)
+  }, [])
   
   return (
     <>
@@ -30,8 +41,6 @@ const Home: NextPage = ({ regions }: any) => {
   )
 }
 
-export default Home
-
 export const getServerSideProps = async () => {
   const res = await fetch(
     'https://restcountries.com/v2/all?fields=name,flags,region,subregion,alpha3Code'
@@ -39,9 +48,14 @@ export const getServerSideProps = async () => {
   const json = await res.json()
   const grouped = groupBy(json, (item: any) => item.region)
 
+  const countriesRes = await fetch(`https://travelbriefing.org/countries.json`)
+  const countriesJson = await countriesRes.json()
+  const countries = countriesJson.map((countries: { name: string }) => ({name: countries.name}))
+
   return {
     props: {
       regions: grouped,
+      countries,
     },
   }
 }
