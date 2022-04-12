@@ -24,8 +24,8 @@ export default function Hero() {
       </div>
 
       <div className="z-40 relative flex gap-8 justify-center">
-        <button className="button">Explore Europe</button>
-        <button className="button">Restrictions in Africa</button>
+        <a href="#europe" className="button">Explore Europe</a>
+        <a href="#africa" className="button">Restrictions in Africa</a>
       </div>
     </div>
   )

@@ -19,7 +19,8 @@
     @apply box-border;
   }
 
-  a, p {
+  a:not(.button),
+  p {
     font-family: 'Inter', sans-serif;
   }
 }

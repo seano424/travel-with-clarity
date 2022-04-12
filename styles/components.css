@@ -1,6 +1,6 @@
 @layer components {
   .button {
-    @apply bg-primary text-white px-6 py-3 text-lg rounded-full;
+    @apply bg-primary text-white px-6 py-3 text-lg rounded-full not-italic capitalize;
   }
 
   .header {
