@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Form from './Form'
+import SearchForm from './SearchForm'
 import Link from 'next/link'
 
 export default function Header() {
@@ -39,7 +39,7 @@ export default function Header() {
           ))}
         </div>
         <div className="flex gap-3 relative items-center">
-          <Form />
+          <SearchForm />
 
           {/* Mobile Hamburger */}
           <div className="lg:hidden items-center gap-3 flex flex-col">

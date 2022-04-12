@@ -2,17 +2,16 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import Fuse from 'fuse.js'
 
-export default function Form() {
+export default function SearchForm() {
   const [value, setValue] = useState('')
   const router = useRouter()
   const [isExpanded, setIsExpanded] = useState(false)
   const handleSubmit = (event: React.FormEvent): void => {
     event.preventDefault()
     router.push(`/country/${value}`)
-  }  
-  
-  console.log('hello');
-  
+  }
+
+  console.log('hello')
 
   return (
     <form
@@ -28,7 +27,9 @@ export default function Form() {
         value={value}
         placeholder="Choose a country"
         className={`rounded-full px-6 py-2 focus:outline-none text-black tracking-tighter ${
-          isExpanded ? 'w-full h-full scale-x-full' : 'w-0 h-0 scale-x-0 lg:w-full lg:h-full lg:scale-100'
+          isExpanded
+            ? 'w-full h-full scale-x-full'
+            : 'w-0 h-0 scale-x-0 lg:w-full lg:h-full lg:scale-100'
         }`}
       />
       <svg
