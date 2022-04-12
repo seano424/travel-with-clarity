@@ -11,7 +11,7 @@ export default function Region(props: Props) {
   
   return (
     <section
-      className="border-b border-gray-100 pb-20 shadow-lg"
+      className="border-b border-gray-100 pb-20 shadow-lg pt-16 -mt-16"
       id={name.toLowerCase()}
     >
       <div className="text-7xl text-black text-center mt-20 mb-10">

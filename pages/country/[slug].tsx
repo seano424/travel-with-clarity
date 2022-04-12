@@ -44,32 +44,37 @@ interface Props {
 
 export default function Country(props: Props) {
   const { country } = props
-  const [backgroundImage, setBackgroundImage] = useState(null)
+  const [backgroundImage, setBackgroundImage] = useState('')
   useEffect(() => {
     fetch(
       `https://api.unsplash.com/search/photos?page=2&per_page=2&client_id=${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}&query=${country?.names?.name}&orientation=landscape`
     )
       .then((res) => res.json())
-      .then((data) => setBackgroundImage(data.results[0].urls.full))
+      .then((data) => setBackgroundImage(data.results[0].urls.full ?? ''))
   }, [props.country])
 
   console.log(backgroundImage)
 
   return (
-    <section className="px-10 pt-32 text-black">
-      <div className="flex items-center gap-7 justify-center">
-        {/* <img
-          src={``}
-          alt="background image..."
-        /> */}
-        <h1 className="header">{country?.names?.name}</h1>
+    <section className="px-10 pt-32 text-black bg-black">
+      <div className="relative">
         <img
-          className="w-20 border object-cover rounded"
-          src={`https://countryflagsapi.com/svg/${country?.names?.iso3}`}
-          alt="Country Flag"
+          className="absolute inset-0 w-full h-full object-cover"
+          src={backgroundImage}
+          alt="Background Image from Unsplash"
         />
+        <div className="z-10 flex items-center gap-7 justify-center filter backdrop-contrast-150 backdrop-brightness-75">
+          <h1 className="header text-yellow-300 text-9xl my-20 z-10">
+            {country?.names?.name}
+          </h1>
+          <img
+            className="w-40 z-10 border object-cover rounded"
+            src={`https://countryflagsapi.com/svg/${country?.names?.iso3}`}
+            alt="Country Flag"
+          />
+        </div>
       </div>
-      <div>
+      <div className='bg-white pb-20'>
         <div className="card">
           <p>Travel advice</p>
           <div className="p-2">

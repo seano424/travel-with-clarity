@@ -7,6 +7,9 @@ module.exports = {
     extend: {
       colors: {
         primary: '#008BFF'
+      },
+      animation: {
+        'spin-slow': 'spin 30s linear infinite'
       }
     },
     debugScreens: {

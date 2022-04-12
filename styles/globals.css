@@ -13,13 +13,13 @@
     font-family: 'Poppins', sans-serif;
   }
   a {
-    @apply no-underline text-inherit;
+    @apply no-underline text-inherit uppercase tracking-tighter italic hover:text-purple-500;
   }
   * {
     @apply box-border;
   }
 
-  p {
+  a, p {
     font-family: 'Inter', sans-serif;
   }
 }

@@ -11,7 +11,7 @@ export default function Header() {
   }
 
   return (
-    <nav className="fixed z-50 flex items-center justify-center w-screen mt-12 xl:my-10">
+    <nav className="fixed z-50 flex items-center justify-center w-screen py-12 lg:py-4 bg-black/90">
       <a
         className="absolute left-4 xl:left-4 flex gap-3 items-center xl:pl-20"
         href="/"
@@ -19,7 +19,7 @@ export default function Header() {
         <img
           src="/images/blue-globe.png"
           alt="Blue Globe Icon"
-          className="w-16 h-16"
+          className="w-16 h-16 animate-spin-slow"
         />
         <span className="flex flex-col text-xl">
           Travel
