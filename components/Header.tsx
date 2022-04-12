@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Form from './Form'
+import Link from 'next/link'
 
 export default function Header() {
   const REGIONS = ['Africa', 'Americas', 'Asia', 'Europe', 'Oceania']
@@ -14,23 +15,22 @@ export default function Header() {
 
   return (
     <nav className="fixed z-50 flex items-center justify-between lg:justify-center w-screen h-28 p-6 lg:py-4 lg:px-0 bg-black/90 uppercase tracking-tighter italic">
-      <a
-        className="lg:absolute left-4 xl:left-4 flex gap-3 items-center xl:pl-20"
-        href="/"
-      >
-        <img
-          src="/images/blue-globe.png"
-          alt="Blue Globe Icon"
-          className="w-16 h-16 animate-spin-slow"
-        />
-        <span className="flex flex-col text-xl">
-          Travel
-          <span>with Clarity</span>
-        </span>
-      </a>
-      <ul className="hidden xl:flex items-center space-x-6 bg-black/70 text-white rounded-full px-16 py-2 text-xl filter backdrop-blur">
+      <Link href="/">
+        <a className="lg:absolute left-4 xl:left-4 flex gap-3 items-center xl:pl-20">
+          <img
+            src="/images/blue-globe.png"
+            alt="Blue Globe Icon"
+            className="w-16 h-16 animate-spin-slow"
+          />
+          <span className="flex flex-col text-xl">
+            Travel
+            <span>with Clarity</span>
+          </span>
+        </a>
+      </Link>
+      <ul className="hidden xl:flex items-center space-x-6 bg-black/40 text-white rounded-full p-4 text-xl filter backdrop-blur">
         {REGIONS.map((region, index) => (
-          <a key={index} href={`#${region.toLowerCase()}`}>
+          <a key={index} href={`/#${region.toLowerCase()}`}>
             {region}
           </a>
         ))}
@@ -38,35 +38,38 @@ export default function Header() {
       </ul>
 
       {/* Mobile Nav */}
-      <div className="lg:hidden flex flex-col">
-        <svg
-          onClick={() => setOpen(!open)}
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-8 w-8 cursor-pointer transition-all duration-300"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fillRule="evenodd"
-            d={!open ? openIcon : closeIcon}
-            clipRule="evenodd"
-          />
-        </svg>
-        <ul
-          className={`flex flex-col absolute items-center py-10 pr-10 right-0 bg-black/90 w-1/3 top-28 translate-x-full transition-all duration-500 ${
-            open && 'opacity-100 translate-x-0'
-          }`}
-        >
-          {REGIONS.map((region, index) => (
-            <a
-              className="my-2 text-lg not-italic"
-              key={index}
-              href={`/#${region.toLowerCase()}`}
-            >
-              {region}
-            </a>
-          ))}
-        </ul>
+      <div className="lg:hidden flex items-center gap-3">
+        <Form />
+        <div className="flex flex-col">
+          <svg
+            onClick={() => setOpen(!open)}
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-8 w-8 cursor-pointer transition-all duration-300"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d={!open ? openIcon : closeIcon}
+              clipRule="evenodd"
+            />
+          </svg>
+          <ul
+            className={`flex flex-col absolute items-center py-10 pr-10 right-0 bg-black/90 w-1/3 top-28 translate-x-full transition-all duration-500 ${
+              open && 'opacity-100 translate-x-0'
+            }`}
+          >
+            {REGIONS.map((region, index) => (
+              <a
+                className="my-2 text-lg not-italic"
+                key={index}
+                href={`/#${region.toLowerCase()}`}
+              >
+                {region}
+              </a>
+            ))}
+          </ul>
+        </div>
       </div>
     </nav>
   )

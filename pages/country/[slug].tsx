@@ -10,6 +10,10 @@ interface Props {
         advise: string
         url: string
       }
+      CA: {
+        advise: string
+        url: string
+      }
     }
     vaccinations: {
       message: string
@@ -44,6 +48,7 @@ interface Props {
 
 export default function Country(props: Props) {
   const { country, backgroundImage } = props
+  console.log(country)
 
   return (
     <section className="px-10 py-32 text-black bg-black">
@@ -54,7 +59,7 @@ export default function Country(props: Props) {
           alt="Background Image from Unsplash"
         />
         <div className="z-10 flex items-center gap-7 justify-center filter backdrop-contrast-150 backdrop-brightness-75">
-          <h1 className="header text-yellow-300 text-9xl my-20 z-10">
+          <h1 className="header text-yellow-300 text-9xl max-w-5xl my-20 z-10">
             {country?.names?.name}
           </h1>
           <img
@@ -68,33 +73,76 @@ export default function Country(props: Props) {
         <div className="card">
           <p>Travel advice</p>
           <div className="p-6">
-            <p>{country?.advise?.UA.advise}</p>
-            <p>Australia - Department of foreign affairs</p>
-            <a
-              className="flex items-center gap-1 not-italic capitalize"
-              target="_blank"
-              href={country?.advise?.UA.url}
-            >
-              View Full Report
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                />
-              </svg>
-            </a>
+            {/* Aussie */}
+            {country?.advise?.UA && (
+              <div className="mb-3">
+                <p>{country?.advise?.UA?.advise}</p>
+                <p>Australia - Department of foreign affairs</p>
+                <a
+                  className="flex items-center gap-1 not-italic capitalize"
+                  target="_blank"
+                  href={country?.advise?.UA?.url}
+                >
+                  View Full Report
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                    />
+                  </svg>
+                </a>
+              </div>
+            )}
+
+            {/* Canada */}
+            {country?.advise?.CA && (
+              <div>
+                <p>Canada</p>
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: country?.advise?.CA?.advise,
+                  }}
+                ></p>
+                <a
+                  className="flex items-center gap-1 not-italic capitalize"
+                  target="_blank"
+                  href={country?.advise?.CA?.url}
+                >
+                  View Full Report
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                    />
+                  </svg>
+                </a>
+              </div>
+            )}
           </div>
         </div>
         <div className="card">
           <p>Vaccinations</p>
+          {!country?.vaccinations.length && (
+            <div className="shadow-sm p-6">
+              <p>None necessary</p>
+            </div>
+          )}
           {country?.vaccinations?.map(
             (v: { name: string; message: string }) => (
               <div key={v.name} className="p-6 shadow-sm mb-1">
@@ -105,19 +153,30 @@ export default function Country(props: Props) {
           )}
         </div>
 
-        <div className="card">
-          <p>Languages Spoken:</p>
-          {country?.language.map((lang) => (
-            <div key={lang.language} className="p-6 shadow-sm mb-1">
-              <p>
-                {lang.official === 'Yes'
-                  ? 'The official language is '
-                  : 'Other languages spoken are: '}{' '}
-                {lang.language}
-              </p>
+        {country?.language.length > 0 && (
+          <div className="card">
+            <p>Languages Spoken:</p>
+            {country?.language.map((lang) => (
+              <div key={lang.language} className="p-6 shadow-sm mb-1">
+                <p>
+                  {lang.official === 'Yes'
+                    ? 'The official language is '
+                    : 'Other languages spoken are: '}{' '}
+                  {lang.language}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {country?.currency?.name && (
+          <div className="card">
+            <p>Currency Used:</p>
+            <div className="p-6 shadow-sm mb-1">
+              <p>{country?.currency?.name}</p>
             </div>
-          ))}
-        </div>
+          </div>
+        )}
       </div>
     </section>
   )
@@ -133,10 +192,11 @@ export async function getServerSideProps({ params }: any) {
   const data = await res.json()
 
   const unsplash = await fetch(
-    `https://api.unsplash.com/search/photos?page=2&per_page=2&client_id=${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}&query=${data.names.name}&orientation=landscape`
+    `https://api.unsplash.com/search/photos?page=2&per_page=10&client_id=${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}&query=${data.names.name}&orientation=landscape`
   )
   const unsplashData = await unsplash.json()
-  const backgroundImage = unsplashData.results[0].urls.full
+  const randomPic = Math.floor(Math.random() * unsplashData.results.length)
+  const backgroundImage = unsplashData.results[randomPic].urls.full
 
   // Pass post data to the page via props
   return { props: { country: data, backgroundImage } }
