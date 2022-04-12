@@ -1,0 +1,25 @@
+@import './components.css';
+
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Poppins:wght@600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    @apply p-0 m-0;
+    font-family: 'Poppins', sans-serif;
+  }
+  a {
+    @apply no-underline text-inherit;
+  }
+  * {
+    @apply box-border;
+  }
+
+  p {
+    font-family: 'Inter', sans-serif;
+  }
+}
