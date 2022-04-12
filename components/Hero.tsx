@@ -13,10 +13,10 @@ export default function Hero() {
         <img className="xl:hidden h-full w-full object-cover" src="/images/river.jpg" alt="Pool Image" />
       </div>
       <div className="max-w-3xl xl:max-w-full mx-auto">
-        <h1 className="z-40 xl:px-20 relative text-6xl xl:text-8xl leading-[1.1em] tracking-tight">
+        <h1 className="z-30 xl:px-20 relative text-6xl xl:text-8xl leading-[1.1em] tracking-tight">
           The world is a home to many great places to discover.
         </h1>
-        <p className="text-lg max-w-xl xl:max-w-4xl xl:text-2xl z-40 relative tracking-wider leading-[1.5em] font-black mx-auto mt-4 xl:mt-10 mb-10 drop-shadow-2xl filter">
+        <p className="text-lg max-w-xl xl:max-w-4xl xl:text-2xl z-30 relative tracking-wider leading-[1.5em] font-black mx-auto mt-4 xl:mt-10 mb-10 drop-shadow-2xl filter">
           But also it's great to be prepared. During these complicated times here
           is an almanac of country statuses and restrictions. Travel with ease in
           mind.
