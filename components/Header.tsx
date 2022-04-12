@@ -1,15 +1,10 @@
 import React, { useState } from 'react'
+import Form from './Form'
 
 export default function Header() {
   const REGIONS = ['Africa', 'Americas', 'Asia', 'Europe', 'Oceania']
 
-  const [value, setValue] = useState('')
   const [open, setOpen] = useState(false)
-
-  const handleSubmit = (event: React.FormEvent): void => {
-    event.preventDefault()
-    console.log(value)
-  }
 
   const closeIcon =
     'M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z'
@@ -39,15 +34,7 @@ export default function Header() {
             {region}
           </a>
         ))}
-        <form onSubmit={handleSubmit}>
-          <input
-            onChange={(e) => setValue(e.target.value)}
-            type="text"
-            value={value}
-            placeholder="Choose a country"
-            className="rounded-full px-3 py-2 focus:outline-none text-black tracking-tighter"
-          />
-        </form>
+        <Form />
       </ul>
 
       {/* Mobile Nav */}
