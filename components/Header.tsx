@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Form from './Form'
 
 export default function Header() {
@@ -13,7 +13,7 @@ export default function Header() {
     'M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z'
 
   return (
-    <nav className="fixed z-50 flex items-center justify-between lg:justify-center w-screen h-28 p-6 lg:py-4 lg:px-0 bg-black/90">
+    <nav className="fixed z-50 flex items-center justify-between lg:justify-center w-screen h-28 p-6 lg:py-4 lg:px-0 bg-black/90 uppercase tracking-tighter italic">
       <a
         className="lg:absolute left-4 xl:left-4 flex gap-3 items-center xl:pl-20"
         href="/"
@@ -61,7 +61,7 @@ export default function Header() {
             <a
               className="my-2 text-lg not-italic"
               key={index}
-              href={`#${region.toLowerCase()}`}
+              href={`/#${region.toLowerCase()}`}
             >
               {region}
             </a>
