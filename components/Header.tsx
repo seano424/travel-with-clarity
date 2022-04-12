@@ -13,6 +13,8 @@ export default function Header() {
 
   return (
     <nav className="fixed z-50 flex items-center justify-between lg:justify-center w-screen h-28 p-6 lg:py-4 lg:px-0 bg-black/90 uppercase tracking-tighter italic">
+      
+      {/* App Icon */}
       <Link href="/">
         <a className="lg:absolute left-4 xl:left-4 flex gap-3 items-center xl:pl-20">
           <img
@@ -26,49 +28,54 @@ export default function Header() {
           </span>
         </a>
       </Link>
-      <ul className="hidden xl:flex items-center space-x-6 bg-black/40 text-white rounded-full p-4 text-xl filter backdrop-blur">
+
+      {/* Desktop Navbar */}
+      <ul className="lg:flex lg:items-center lg:space-x-6 lg:bg-black/40 lg:text-white lg:rounded-full lg:p-4 lg:text-xl lg:filter backdrop-blur">
+        <div className="hidden lg:flex items-center space-x-6">
+          {REGIONS.map((region, index) => (
+            <a key={index} href={`/#${region.toLowerCase()}`}>
+              {region}
+            </a>
+          ))}
+        </div>
+        <div className="flex gap-3 relative items-center">
+          <Form />
+
+          {/* Mobile Hamburger */}
+          <div className="lg:hidden items-center gap-3 flex flex-col">
+            <svg
+              onClick={() => setOpen(!open)}
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-8 w-8 cursor-pointer transition-all duration-300"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d={!open ? openIcon : closeIcon}
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+        </div>
+      </ul>
+
+      {/* Mobile Dropdownd */}
+      <ul
+        className={`flex flex-col lg:hidden absolute items-center py-10 px-10 right-0 bg-black/90 w-1/3 top-28 translate-x-full transition-all duration-500 ${
+          open && 'opacity-100 translate-x-0'
+        }`}
+      >
         {REGIONS.map((region, index) => (
-          <a key={index} href={`/#${region.toLowerCase()}`}>
+          <a
+            className="my-2 text-lg not-italic"
+            key={index}
+            href={`/#${region.toLowerCase()}`}
+          >
             {region}
           </a>
         ))}
-        <Form />
       </ul>
-
-      {/* Mobile Nav */}
-      <div className="lg:hidden flex items-center gap-3">
-        <Form />
-        <div className="flex flex-col">
-          <svg
-            onClick={() => setOpen(!open)}
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-8 w-8 cursor-pointer transition-all duration-300"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d={!open ? openIcon : closeIcon}
-              clipRule="evenodd"
-            />
-          </svg>
-          <ul
-            className={`flex flex-col absolute items-center py-10 pr-10 right-0 bg-black/90 w-1/3 top-28 translate-x-full transition-all duration-500 ${
-              open && 'opacity-100 translate-x-0'
-            }`}
-          >
-            {REGIONS.map((region, index) => (
-              <a
-                className="my-2 text-lg not-italic"
-                key={index}
-                href={`/#${region.toLowerCase()}`}
-              >
-                {region}
-              </a>
-            ))}
-          </ul>
-        </div>
-      </div>
     </nav>
   )
 }

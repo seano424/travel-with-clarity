@@ -1,5 +1,3 @@
-import { useContext, useEffect } from 'react'
-import { CountriesContext } from 'contexts/CountriesContext'
 import Hero from '@/components/Hero'
 import Region from '@/components/Region'
 import groupBy from 'lodash/groupBy'
@@ -10,12 +8,13 @@ interface Props {
 }
 
 export default function Home(props: Props) {
-  const { regions, countries } = props
-  const context = useContext(CountriesContext)
+  const { regions } = props
   
-  useEffect(() => {
-    countries && context?.setCountriesList(countries)
-  }, [])
+  // useEffect(() => {
+  //   countries && context?.setCountriesList(countries)
+  // }, [])
+  
+  // console.log('hello');
   
   return (
     <>

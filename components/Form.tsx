@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
+import Fuse from 'fuse.js'
 
 export default function Form() {
   const [value, setValue] = useState('')
@@ -8,7 +9,10 @@ export default function Form() {
   const handleSubmit = (event: React.FormEvent): void => {
     event.preventDefault()
     router.push(`/country/${value}`)
-  }
+  }  
+  
+  console.log('hello');
+  
 
   return (
     <form
