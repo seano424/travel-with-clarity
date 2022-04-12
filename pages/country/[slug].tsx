@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
 interface Props {
+  backgroundImage: string
   country: {
     names: {
       name: string
@@ -43,15 +43,7 @@ interface Props {
 }
 
 export default function Country(props: Props) {
-  const { country } = props
-  const [backgroundImage, setBackgroundImage] = useState('')
-  useEffect(() => {
-    fetch(
-      `https://api.unsplash.com/search/photos?page=2&per_page=2&client_id=${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}&query=${country?.names?.name}&orientation=landscape`
-    )
-      .then((res) => res.json())
-      .then((data) => setBackgroundImage(data.results[0].urls.full ?? ''))
-  }, [props.country])  
+  const { country, backgroundImage } = props
 
   return (
     <section className="px-10 py-32 text-black bg-black">
@@ -72,7 +64,7 @@ export default function Country(props: Props) {
           />
         </div>
       </div>
-      <div className='bg-white'>
+      <div className="bg-white">
         <div className="card">
           <p>Travel advice</p>
           <div className="p-6">
@@ -140,6 +132,12 @@ export async function getServerSideProps({ params }: any) {
   )
   const data = await res.json()
 
+  const unsplash = await fetch(
+    `https://api.unsplash.com/search/photos?page=2&per_page=2&client_id=${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}&query=${data.names.name}&orientation=landscape`
+  )
+  const unsplashData = await unsplash.json()
+  const backgroundImage = unsplashData.results[0].urls.full
+
   // Pass post data to the page via props
-  return { props: { country: data } }
+  return { props: { country: data, backgroundImage } }
 }
