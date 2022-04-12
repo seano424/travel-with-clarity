@@ -45,16 +45,13 @@ interface Props {
 export default function Country(props: Props) {
   const { country } = props
   const [backgroundImage, setBackgroundImage] = useState('')
-  // useEffect(() => {
-  //   fetch(
-  //     `https://api.unsplash.com/search/photos?page=2&per_page=2&client_id=${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}&query=${country?.names?.name}&orientation=landscape`
-  //   )
-  //     .then((res) => res.json())
-  //     .then((data) => setBackgroundImage(data.results[0].urls.full ?? ''))
-  // }, [props.country])
-
-  console.log('hello');
-  
+  useEffect(() => {
+    fetch(
+      `https://api.unsplash.com/search/photos?page=2&per_page=2&client_id=${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}&query=${country?.names?.name}&orientation=landscape`
+    )
+      .then((res) => res.json())
+      .then((data) => setBackgroundImage(data.results[0].urls.full ?? ''))
+  }, [props.country])  
 
   return (
     <section className="px-10 py-32 text-black bg-black">
@@ -134,20 +131,8 @@ export default function Country(props: Props) {
   )
 }
 
-export async function getStaticPaths() {
-  const res = await fetch('https://travelbriefing.org/countries.json')
-  const json = await res.json()
-  const paths = json.map((country: { name: string }) => ({
-    params: { slug: country.name },
-  }))
-  return {
-    paths,
-    fallback: true,
-  }
-}
-
 // This also gets called at build time
-export async function getStaticProps({ params }: any) {
+export async function getServerSideProps({ params }: any) {
   console.log(params.slug)
 
   const res = await fetch(
