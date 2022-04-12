@@ -1,15 +1,15 @@
 import '../styles/globals.css'
 import Layout from '@/components/Layout'
 import type { AppProps } from 'next/app'
-import { CountriesContextProvider } from 'contexts/CountriesContext'
+import { SearchContextProvider } from 'contexts/SearchContext'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <CountriesContextProvider>
+    <SearchContextProvider>
       <Layout>
         <Component {...pageProps} />
       </Layout>
-    </CountriesContextProvider>
+    </SearchContextProvider>
   )
 }
 

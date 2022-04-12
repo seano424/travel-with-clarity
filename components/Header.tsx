@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { SearchContext } from 'contexts/SearchContext'
 import SearchForm from './SearchForm'
 import Link from 'next/link'
 
 export default function Header() {
+  const context = useContext(SearchContext)
   const REGIONS = ['Africa', 'Americas', 'Asia', 'Europe', 'Oceania']
   const [open, setOpen] = useState(false)
   const closeIcon =
@@ -11,12 +13,13 @@ export default function Header() {
   const openIcon =
     'M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z'
 
+  console.log(context?.filteredCountries)
+
   return (
-    <nav className="fixed z-50 flex items-center justify-between lg:justify-center w-screen h-28 p-6 lg:py-4 lg:px-0 bg-black/90 uppercase tracking-tighter italic">
-      
+    <nav className="fixed z-50 flex items-center justify-between lg:justify-center w-screen h-28 lg:py-4 lg:px-0 bg-black/90 uppercase tracking-tighter italic">
       {/* App Icon */}
       <Link href="/">
-        <a className="lg:absolute left-4 xl:left-4 flex gap-3 items-center xl:pl-20">
+        <a className="lg:absolute pl-6 left-4 lg:left-4 flex gap-3 items-center xl:pl-20">
           <img
             src="/images/blue-globe.png"
             alt="Blue Globe Icon"
@@ -30,7 +33,7 @@ export default function Header() {
       </Link>
 
       {/* Desktop Navbar */}
-      <ul className="lg:flex lg:items-center lg:space-x-6 lg:bg-black/40 lg:text-white lg:rounded-full lg:p-4 lg:text-xl lg:filter backdrop-blur">
+      <ul className="lg:flex pr-6 lg:items-center lg:space-x-6 lg:bg-black/40 lg:text-white lg:rounded-full lg:p-4 lg:text-xl lg:filter backdrop-blur">
         <div className="hidden lg:flex items-center space-x-6">
           {REGIONS.map((region, index) => (
             <a key={index} href={`/#${region.toLowerCase()}`}>
@@ -38,7 +41,7 @@ export default function Header() {
             </a>
           ))}
         </div>
-        <div className="flex gap-3 relative items-center">
+        <div className="flex gap-3 items-center">
           <SearchForm />
 
           {/* Mobile Hamburger */}
@@ -59,6 +62,17 @@ export default function Header() {
           </div>
         </div>
       </ul>
+
+      {/* Filter Dropdown */}
+      {context?.filteredCountries?.length > 0 && (
+        <ul className="absolute flex flex-col gap-2 top-28 bg-white w-1/2 right-0 p-4 text-black">
+          {context?.filteredCountries.map((country, i) => (
+            <a className='bg-purple-50 p-3 rounded' href={`/country/${country.item.name}`} key={i}>
+              {country.item.name}
+            </a>
+          ))}
+        </ul>
+      )}
 
       {/* Mobile Dropdownd */}
       <ul

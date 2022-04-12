@@ -1,3 +1,5 @@
+import { useContext, useEffect } from 'react'
+import { SearchContext } from '../contexts/SearchContext'
 import Hero from '@/components/Hero'
 import Region from '@/components/Region'
 import groupBy from 'lodash/groupBy'
@@ -8,13 +10,12 @@ interface Props {
 }
 
 export default function Home(props: Props) {
-  const { regions } = props
-  
-  // useEffect(() => {
-  //   countries && context?.setCountriesList(countries)
-  // }, [])
-  
-  // console.log('hello');
+  const context = useContext(SearchContext)
+  const { regions, countries } = props
+
+  useEffect(() => {
+    countries && context?.setCountriesList(countries)
+  }, [])
   
   return (
     <>
@@ -49,7 +50,9 @@ export const getServerSideProps = async () => {
 
   const countriesRes = await fetch(`https://travelbriefing.org/countries.json`)
   const countriesJson = await countriesRes.json()
-  const countries = countriesJson.map((countries: { name: string }) => ({name: countries.name}))
+  const countries = countriesJson.map((countries: { name: string }) => ({
+    name: countries.name,
+  }))
 
   return {
     props: {

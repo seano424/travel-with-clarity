@@ -1,4 +1,7 @@
+import { useContext, useEffect } from 'react'
+import { SearchContext } from '../../contexts/SearchContext'
 interface Props {
+  countries: string[]
   backgroundImage: string
   country: {
     names: {
@@ -47,8 +50,12 @@ interface Props {
 }
 
 export default function Country(props: Props) {
-  const { country, backgroundImage } = props
-  console.log(country)
+  const { country, backgroundImage, countries } = props
+  const context = useContext(SearchContext)
+
+  useEffect(() => {
+    countries && context?.setCountriesList(countries)
+  }, [])
 
   return (
     <section className="px-10 py-32 text-black bg-black">
@@ -58,8 +65,8 @@ export default function Country(props: Props) {
           src={backgroundImage}
           alt="Background Image from Unsplash"
         />
-        <div className="z-10 flex items-center gap-7 justify-center filter backdrop-contrast-150 backdrop-brightness-75">
-          <h1 className="header text-yellow-300 text-9xl max-w-5xl my-20 z-10">
+        <div className="z-10 flex items-center gap-7 justify-center filter backdrop-contrast-150 backdrop-brightness-50">
+          <h1 className="header text-orange-300 lg:text-yellow-300 text-7xl lg:text-9xl max-w-5xl my-20 z-10">
             {country?.names?.name}
           </h1>
           <img
@@ -184,11 +191,13 @@ export default function Country(props: Props) {
 
 // This also gets called at build time
 export async function getServerSideProps({ params }: any) {
+  // Country Data
   const res = await fetch(
     `https://travelbriefing.org/${params.slug}?format=json`
   )
   const data = await res.json()
 
+  // Unsplash Background Image
   const unsplash = await fetch(
     `https://api.unsplash.com/search/photos?page=2&per_page=10&client_id=${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}&query=${data.names.name}&orientation=landscape`
   )
@@ -196,6 +205,13 @@ export async function getServerSideProps({ params }: any) {
   const randomPic = Math.floor(Math.random() * unsplashData.results.length)
   const backgroundImage = unsplashData.results[randomPic].urls.full
 
+  // All Countries for Filter
+  const countriesRes = await fetch(`https://travelbriefing.org/countries.json`)
+  const countriesJson = await countriesRes.json()
+  const countries = countriesJson.map((countries: { name: string }) => ({
+    name: countries.name,
+  }))
+
   // Pass post data to the page via props
-  return { props: { country: data, backgroundImage } }
+  return { props: { country: data, backgroundImage, countries } }
 }
