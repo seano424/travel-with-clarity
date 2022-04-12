@@ -15,8 +15,14 @@ export default function SearchForm() {
 
   const handleSubmit = (event: React.FormEvent): void => {
     event.preventDefault()
-    // router.push(`/country/${value}`)
+    const match = fuse.search(value).slice(0, 10).map(result => result.item.name.toLowerCase()).includes(value.toLowerCase().trim())
+    match && router.push(`/country/${value}`)
+    setValue('')
+    context?.setFilteredCountries([])
   }
+
+  console.log(fuse.search(value).slice(0, 10).map(result => result.item.name.toLowerCase()).includes(value.toLowerCase().trim()));
+  
 
   const handleFilter = (event: React.FormEvent): void => {
     const element = event.currentTarget as HTMLInputElement

@@ -199,11 +199,11 @@ export async function getServerSideProps({ params }: any) {
 
   // Unsplash Background Image
   const unsplash = await fetch(
-    `https://api.unsplash.com/search/photos?page=2&per_page=10&client_id=${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}&query=${data.names.name}&orientation=landscape`
+    `https://api.unsplash.com/search/photos?page=1&per_page=10&client_id=${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}&query=${data.names.name}&orientation=landscape`
   )
   const unsplashData = await unsplash.json()
   const randomPic = Math.floor(Math.random() * unsplashData.results.length)
-  const backgroundImage = unsplashData.results[randomPic].urls.full
+  const backgroundImage = unsplashData?.results[randomPic].urls.full ?? ''
 
   // All Countries for Filter
   const countriesRes = await fetch(`https://travelbriefing.org/countries.json`)

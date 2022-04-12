@@ -13,8 +13,6 @@ export default function Header() {
   const openIcon =
     'M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z'
 
-  console.log(context?.filteredCountries)
-
   return (
     <nav className="fixed z-50 flex items-center justify-between lg:justify-center w-screen h-28 lg:py-4 lg:px-0 bg-black/90 uppercase tracking-tighter italic">
       {/* App Icon */}
