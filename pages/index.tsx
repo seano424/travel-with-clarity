@@ -1,8 +1,7 @@
-import { useContext, useEffect } from 'react'
-import { SearchContext } from '../contexts/SearchContext'
 import Hero from '@/components/Hero'
 import Region from '@/components/Region'
 import groupBy from 'lodash/groupBy'
+import Header from '@/components/Header'
 
 interface Props {
   regions: []
@@ -10,15 +9,11 @@ interface Props {
 }
 
 export default function Home(props: Props) {
-  const context = useContext(SearchContext)
   const { regions, countries } = props
-
-  useEffect(() => {
-    countries && context?.setCountriesList(countries)
-  }, [])
   
   return (
     <>
+      <Header countries={countries} />
       <Hero />
       <section>
         {Object.entries(regions)

@@ -1,15 +1,18 @@
-import React, { useState, useContext } from 'react'
-import { SearchContext } from 'contexts/SearchContext'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import Fuse from 'fuse.js'
 
-export default function SearchForm() {
+interface Props {
+  countries: string[]
+}
+
+export default function SearchForm(props: Props) {  
   const [value, setValue] = useState('')
-  const context = useContext(SearchContext)
+  const [filteredCountries, setFilteredCountries] = useState([])
   const router = useRouter()
   const [isExpanded, setIsExpanded] = useState(false)
 
-  const fuse = new Fuse(context?.countriesList || [], {
+  const fuse = new Fuse(props.countries || [], {
     keys: ['name'],
   })
 
@@ -18,17 +21,14 @@ export default function SearchForm() {
     const match = fuse.search(value).slice(0, 10).map(result => result.item.name.toLowerCase()).includes(value.toLowerCase().trim())
     match && router.push(`/country/${value}`)
     setValue('')
-    context?.setFilteredCountries([])
+    setFilteredCountries([])
   }
-
-  console.log(fuse.search(value).slice(0, 10).map(result => result.item.name.toLowerCase()).includes(value.toLowerCase().trim()));
   
-
   const handleFilter = (event: React.FormEvent): void => {
     const element = event.currentTarget as HTMLInputElement
     const value = element.value
     setValue(value)
-    context?.setFilteredCountries(fuse.search(value).slice(0, 10))
+    setFilteredCountries(fuse.search(value).slice(0, 10))
   }
 
   return (
@@ -66,8 +66,18 @@ export default function SearchForm() {
             clipRule="evenodd"
           />
         </svg>
-        
       </form>
+
+      {/* Filter Dropdown */}
+      {filteredCountries?.length > 0 && (
+        <ul className="absolute flex flex-col gap-2 top-28 bg-white w-1/2 right-0 p-4 text-black">
+          {filteredCountries.map((country, i) => (
+            <a className='bg-purple-50 p-3 rounded' href={`/country/${country.item.name}`} key={i}>
+              {country.item.name}
+            </a>
+          ))}
+        </ul>
+      )}
     </>
   )
 }
