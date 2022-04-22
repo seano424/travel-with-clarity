@@ -6,29 +6,34 @@ interface Props {
   countries: string[]
 }
 
-export default function SearchForm(props: Props) {  
+export default function SearchForm(props: Props) {
   const [value, setValue] = useState('')
-  const [filteredCountries, setFilteredCountries] = useState([])
+  const [filteredCountries, setFilteredCountries] = useState<string[]>([])
   const router = useRouter()
   const [isExpanded, setIsExpanded] = useState(false)
 
-  const fuse = new Fuse(props.countries || [], {
+  const fuse = new Fuse(props.countries, {
     keys: ['name'],
   })
 
   const handleSubmit = (event: React.FormEvent): void => {
     event.preventDefault()
-    const match = fuse.search(value).slice(0, 10).map(result => result.item.name.toLowerCase()).includes(value.toLowerCase().trim())
+    const match = fuse
+      .search(value)
+      .slice(0, 10)
+      .map((result) => result.item.name.toLowerCase())
+      .includes(value.toLowerCase().trim())
     match && router.push(`/country/${value}`)
     setValue('')
     setFilteredCountries([])
   }
-  
+
   const handleFilter = (event: React.FormEvent): void => {
     const element = event.currentTarget as HTMLInputElement
     const value = element.value
+    const filter: any[] = fuse.search(value).slice(0, 10)
     setValue(value)
-    setFilteredCountries(fuse.search(value).slice(0, 10))
+    setFilteredCountries(filter)
   }
 
   return (
@@ -70,9 +75,13 @@ export default function SearchForm(props: Props) {
 
       {/* Filter Dropdown */}
       {filteredCountries?.length > 0 && (
-        <ul className="absolute flex flex-col gap-2 top-28 bg-white w-1/2 right-0 p-4 text-black">
+        <ul className="absolute top-[6.5rem] flex flex-col gap-2 bg-white w-1/3 right-0 p-4 text-black">
           {filteredCountries.map((country, i) => (
-            <a className='bg-purple-50 p-3 rounded' href={`/country/${country.item.name}`} key={i}>
+            <a
+              className="bg-purple-50 p-3 rounded"
+              href={`/country/${country.item.name}`}
+              key={i}
+            >
               {country.item.name}
             </a>
           ))}

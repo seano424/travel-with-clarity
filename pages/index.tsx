@@ -1,5 +1,5 @@
 import Hero from '@/components/Hero'
-import Region from '@/components/Region'
+import Regions from '@/components/Regions'
 import groupBy from 'lodash/groupBy'
 import Header from '@/components/Header'
 
@@ -10,28 +10,12 @@ interface Props {
 
 export default function Home(props: Props) {
   const { regions, countries } = props
-  
+
   return (
     <>
       <Header countries={countries} />
       <Hero />
-      <section>
-        {Object.entries(regions)
-          .sort()
-          .map(
-            (region) =>
-              region[0] !== 'Antarctic' &&
-              region[0] !== 'Antarctic Ocean' &&
-              region[0] !== 'Polar' && (
-                <Region
-                  key={region[0]}
-                  name={region[0]}
-                  heading={region[0]}
-                  countries={region[1]}
-                />
-              )
-          )}
-      </section>
+      <Regions regions={regions} />
     </>
   )
 }
