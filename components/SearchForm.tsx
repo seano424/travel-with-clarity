@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { useRouter } from 'next/router'
 import Fuse from 'fuse.js'
 
@@ -7,13 +7,21 @@ interface Props {
 }
 
 export default function SearchForm(props: Props) {
-  const [value, setValue] = useState('')
-  const [filteredCountries, setFilteredCountries] = useState<string[]>([])
   const router = useRouter()
+  const [value, setValue] = useState('')
   const [isExpanded, setIsExpanded] = useState(false)
+  const [searchResults, setSearchResults] = useState<string[]>([])
+
+  const sortedSearchResults = searchResults.sort(
+    (resultA: any, resultB: any) => {
+      return resultA.score - resultB.score
+    }
+  )
 
   const fuse = new Fuse(props.countries, {
     keys: ['name'],
+    includeScore: true,
+    threshold: 0.1,
   })
 
   const handleSubmit = (event: React.FormEvent): void => {
@@ -21,19 +29,18 @@ export default function SearchForm(props: Props) {
     const match = fuse
       .search(value)
       .slice(0, 10)
-      .map((result) => result.item.name.toLowerCase())
+      .map((result: { item: {} }) => result.item.name.toLowerCase())
       .includes(value.toLowerCase().trim())
     match && router.push(`/country/${value}`)
     setValue('')
-    setFilteredCountries([])
+    setSearchResults([])
   }
 
-  const handleFilter = (event: React.FormEvent): void => {
-    const element = event.currentTarget as HTMLInputElement
-    const value = element.value
-    const filter: any[] = fuse.search(value).slice(0, 10)
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value
+    const results: any[] = fuse.search(value).slice(0, 10)
     setValue(value)
-    setFilteredCountries(filter)
+    setSearchResults(results)
   }
 
   return (
@@ -46,11 +53,11 @@ export default function SearchForm(props: Props) {
       >
         <input
           autoFocus
-          onChange={handleFilter}
+          onChange={handleChange}
           type="text"
           value={value}
           placeholder="Choose a country"
-          className={`rounded-full px-6 py-2 focus:outline-none text-black tracking-tighter ${
+          className={`rounded-full ml-2 px-3 py-1 lg:px-6 lg:py-2 focus:outline-none text-black tracking-tighter ${
             isExpanded
               ? 'w-full h-full scale-x-full'
               : 'w-0 h-0 scale-x-0 lg:w-full lg:h-full lg:scale-100'
@@ -59,7 +66,7 @@ export default function SearchForm(props: Props) {
         <svg
           onClick={() => setIsExpanded(!isExpanded)}
           xmlns="http://www.w3.org/2000/svg"
-          className={`h-8 w-8 text-gray-900 bg-white p-2 transition-all duration-300 rounded-full ${
+          className={`h-9 w-9 text-gray-900 bg-white p-2 transition-all duration-300 rounded-full ${
             isExpanded ? 'absolute right-3' : 'lg:absolute lg:right-3'
           }`}
           viewBox="0 0 20 20"
@@ -74,11 +81,11 @@ export default function SearchForm(props: Props) {
       </form>
 
       {/* Filter Dropdown */}
-      {filteredCountries?.length > 0 && (
-        <ul className="absolute top-[6.5rem] flex flex-col gap-2 bg-white w-1/3 right-0 p-4 text-black">
-          {filteredCountries.map((country, i) => (
+      {sortedSearchResults?.length > 0 && (
+        <ul className="flex flex-col text-center bg-white gap-3 right-0 top-20 w-full absolute">
+          {sortedSearchResults.map((country, i) => (
             <a
-              className="bg-purple-50 p-3 rounded"
+              className="text-black p-3 border-b"
               href={`/country/${country.item.name}`}
               key={i}
             >

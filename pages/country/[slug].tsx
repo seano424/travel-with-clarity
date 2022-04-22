@@ -1,5 +1,6 @@
-import Header from '@/components/Header'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
+import Header from '@/components/Header'
 interface Props {
   countries: string[]
   backgroundImage: string
@@ -53,32 +54,36 @@ export default function Country(props: Props) {
   const { country, backgroundImage, countries } = props
   const { query } = useRouter()
   const slug = query.slug
-  console.log(slug === country.names.name)
+  // https://countryflagsapi.com/svg/${country?.names?.iso3}
   return (
     <>
       <Header countries={countries} />
-      {slug === country.names.name ? (
-        <section className="px-10 py-32 text-black bg-black">
+      {slug?.toLocaleString().toLowerCase() ===
+      country.names.name.toLowerCase() ? (
+        <section className="text-black bg-black">
           <div className="relative">
             <img
-              className="absolute inset-0 w-full h-full object-cover"
+              className="w-full h-[500px] object-cover"
               src={backgroundImage}
-              alt="Background Image from Unsplash"
+              alt="Country Unplash Image"
             />
-            <div className="z-10 flex items-center gap-7 justify-center filter backdrop-contrast-150 backdrop-brightness-50">
-              <h1 className="header text-orange-300 lg:text-yellow-300 text-7xl lg:text-9xl max-w-5xl my-20 z-10">
+            <div className="absolute inset-0 flex items-center justify-center z-10">
+              <h1 className=" text-white text-3xl lg:text-9xl max-w-5xl">
                 {country?.names?.name}
               </h1>
-              <img
-                className="w-40 z-10 border object-cover rounded"
-                src={`https://countryflagsapi.com/svg/${country?.names?.iso3}`}
-                alt="Country Flag"
-              />
             </div>
           </div>
+
           <div className="bg-white">
-            <div className="card">
-              <p>Travel advice</p>
+            <div>
+              <div className="card flex justify-between items-center bg-black text-white">
+                <p>Travel advice</p>
+                <img
+                  className="h-20 w-40 object-cover object-center"
+                  src={`https://countryflagsapi.com/svg/${country?.names?.iso3}`}
+                  alt="Country Flag"
+                />
+              </div>
               <div className="p-6">
                 {/* Aussie */}
                 {country?.advise?.UA && (
@@ -143,6 +148,7 @@ export default function Country(props: Props) {
                 )}
               </div>
             </div>
+
             <div className="card">
               <p>Vaccinations</p>
               {!country?.vaccinations.length && (
@@ -192,9 +198,9 @@ export default function Country(props: Props) {
             Country with the name{' '}
             <span className="text-purple-500 capitalize">{slug}</span> not found
           </h1>
-          <a href="/" className="button bg-red-400 hover:text-white">
-            Go back
-          </a>
+          <Link href="/">
+            <a className="button bg-red-400 hover:text-white">Go back</a>
+          </Link>
         </section>
       )}
     </>
@@ -211,7 +217,7 @@ export async function getServerSideProps({ params }: any) {
 
   // Unsplash Background Image
   const unsplash = await fetch(
-    `https://api.unsplash.com/search/photos?page=1&per_page=10&client_id=${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}&query=${data.names.name}&orientation=landscape`
+    `https://api.unsplash.com/search/photos?page=1&per_page=10&client_id=${process.env.UNSPLASH_ACCESS_KEY}&query=${data.names.name}&orientation=landscape`
   )
   const unsplashData = await unsplash.json()
   const randomPic = Math.floor(Math.random() * unsplashData.results.length)

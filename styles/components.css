@@ -7,11 +7,7 @@
     @apply text-purple-500 text-7xl tracking-tighter text-center mb-2;
   }
 
-  .card {
-    @apply border rounded;
-  }
-
   .card > p {
-    @apply p-6 w-full bg-sky-300 text-xl tracking-wide uppercase;
+    @apply p-6 w-full bg-black text-white text-xl tracking-wide uppercase;
   }
 }

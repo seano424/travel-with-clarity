@@ -1,6 +1,6 @@
+import groupBy from 'lodash/groupBy'
 import Hero from '@/components/Hero'
 import Regions from '@/components/Regions'
-import groupBy from 'lodash/groupBy'
 import Header from '@/components/Header'
 
 interface Props {
@@ -21,22 +21,35 @@ export default function Home(props: Props) {
 }
 
 export const getServerSideProps = async () => {
-  const res = await fetch(
+  // 1.  Fetching the More "Accurate" Travel Briefing Countries List. Necessary for our search.
+  const travelBriefingResponse = await fetch(
+    `https://travelbriefing.org/countries.json`
+  )
+  const travelBriefingJson = await travelBriefingResponse.json()
+  const travelBriefing = travelBriefingJson.map(
+    (countries: { name: string }) => ({
+      name: countries.name,
+    })
+  )
+
+  // 2. Fetching the Rest Countries API in order to group by Regions
+  const restCountriesResponse = await fetch(
     'https://restcountries.com/v2/all?fields=name,flags,region,subregion,alpha3Code'
   )
-  const json = await res.json()
-  const grouped = groupBy(json, (item: any) => item.region)
+  const restCountriesJson = await restCountriesResponse.json()
 
-  const countriesRes = await fetch(`https://travelbriefing.org/countries.json`)
-  const countriesJson = await countriesRes.json()
-  const countries = countriesJson.map((countries: { name: string }) => ({
-    name: countries.name,
-  }))
+  // 3. Comparing the two API countries lists and returning only those countries that match with the Travel Briefing API
+  const countriesDifference = restCountriesJson.filter((o1: any) =>
+    travelBriefing.some((o2: any) => o1.name === o2.name)
+  )
+
+  // 4. Grouping the refined countries array by regions
+  const groupedByRegions = groupBy(countriesDifference, (item: any) => item.region)
 
   return {
     props: {
-      regions: grouped,
-      countries,
+      regions: groupedByRegions,
+      countries: travelBriefing,
     },
   }
 }
