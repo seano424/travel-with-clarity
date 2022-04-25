@@ -1,7 +1,7 @@
 import groupBy from 'lodash/groupBy'
 import Hero from '@/components/Hero'
 import Regions from '@/components/Regions'
-import Header from '@/components/Header'
+import Header from '@/components/Header/Header'
 
 interface Props {
   regions: []

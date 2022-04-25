@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import Header from '@/components/Header'
+import Header from '@/components/Header/Header'
 interface Props {
   countries: string[]
   backgroundImage: string

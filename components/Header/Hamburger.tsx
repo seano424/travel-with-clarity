@@ -1,4 +1,4 @@
-import { closeIcon, openIcon } from '../lib/icons'
+import { closeIcon, openIcon } from '../../lib/icons'
 
 interface Props {
   open: boolean
