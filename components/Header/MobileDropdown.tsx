@@ -1,3 +1,4 @@
+import Link from 'next/link'
 interface Props {
   regions: any[]
   open: boolean
@@ -12,9 +13,9 @@ export default function MobileDropdown(props: Props) {
       }`}
     >
       {regions.map((region: string, index) => (
-        <a key={index} href={`/#${region.toLowerCase()}`}>
-          {region}
-        </a>
+        <Link key={index} href={`/#${region.toLowerCase()}`}>
+          <a>{region}</a>
+        </Link>
       ))}
     </div>
   )
